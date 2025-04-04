@@ -13,8 +13,7 @@ import { Review } from '../../../models/review.model';
   selector: 'app-book-detail',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './book-detail.component.html',
-  styleUrls: ['./book-detail.component.scss']
+  templateUrl: './book-detail.component.html'
 })
 export class BookDetailComponent implements OnInit {
   book: Book | null = null;
@@ -138,6 +137,6 @@ export class BookDetailComponent implements OnInit {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) return false;
 
-    return this.authService.isLibrarian() || review.user.id === currentUser.id;
+    return this.authService.isLibrarian() || (review.user?.id !== undefined && review.user.id === currentUser.id);
   }
 }

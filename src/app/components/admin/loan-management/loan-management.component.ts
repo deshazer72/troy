@@ -7,8 +7,7 @@ import { BookLoan } from '../../../models/book-loan.model';
   selector: 'app-loan-management',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './loan-management.component.html',
-  styleUrls: ['./loan-management.component.scss']
+  templateUrl: './loan-management.component.html'
 })
 export class LoanManagementComponent implements OnInit {
   loans: BookLoan[] = [];

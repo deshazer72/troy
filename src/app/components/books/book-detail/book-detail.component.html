@@ -54,7 +54,7 @@
         @for (i of [1, 2, 3, 4, 5]; track i) {
           <i class="bi" [ngClass]="i <= book.averageRating ? 'bi-star-fill' : 'bi-star'"></i>
         }
-        <span class="ms-2">{{ book.averageRating | number:'1.1-1' }} ({{ book.reviews?.length || 0 }} reviews)</span>
+        <span class="ms-2">{{ book.averageRating | number:'1.1-1' }} ({{ book.reviews.length || 0 }} reviews)</span>
       </div>
 
       <!-- Book Details -->

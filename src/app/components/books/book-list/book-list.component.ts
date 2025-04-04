@@ -9,8 +9,7 @@ import { Book } from '../../../models/book.model';
   selector: 'app-book-list',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss']
+  templateUrl: './book-list.component.html'
 })
 export class BookListComponent implements OnInit {
   books: Book[] = [];

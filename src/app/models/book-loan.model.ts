@@ -8,7 +8,15 @@ export interface BookLoan {
   userId: string;
   user?: User;
   checkoutDate: string;
-  dueDate: string;
+  dueDate: Date;
   returnDate?: string;
+  isReturned: boolean;
+}
+
+export interface BookLoanDto {
+  id: number;
+  bookTitle: string;
+  checkoutDate: string; // Use `string` for dates returned from the API
+  dueDate: string;
   isReturned: boolean;
 }

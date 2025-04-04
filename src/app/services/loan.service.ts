@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BookLoan } from '../models/book-loan.model';
+import { BookLoan, BookLoanDto} from '../models/book-loan.model';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -12,8 +12,8 @@ export class LoanService {
 
   constructor(private http: HttpClient) { }
 
-  getMyLoans(): Observable<BookLoan[]> {
-    return this.http.get<BookLoan[]>(this.apiUrl);
+  getMyLoans(): Observable<BookLoanDto[]> {
+    return this.http.get<BookLoanDto[]>(this.apiUrl);
   }
 
   getAllLoans(): Observable<BookLoan[]> {

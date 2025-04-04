@@ -8,8 +8,7 @@ import { Book } from '../../../models/book.model';
   selector: 'app-book-management',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './book-management.component.html',
-  styleUrls: ['./book-management.component.scss']
+  templateUrl: './book-management.component.html'
 })
 export class BookManagementComponent implements OnInit {
   books: Book[] = [];
