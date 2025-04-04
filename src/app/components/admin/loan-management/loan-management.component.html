@@ -1,0 +1,93 @@
+<h2>Loan Management</h2>
+
+@if (returnSuccess) {
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ returnSuccess }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="returnSuccess = null"></button>
+  </div>
+}
+
+@if (error) {
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="error = null"></button>
+  </div>
+}
+
+@if (loading) {
+  <div class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+} @else if (loans.length === 0) {
+  <div class="alert alert-info">
+    No loans found in the system.
+  </div>
+} @else {
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Customer</th>
+          <th>Checkout Date</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (loan of loans; track loan.id) {
+          <tr>
+            <td>
+              <div class="d-flex align-items-center">
+                <img [src]="loan.book.coverImageUrl" class="img-thumbnail me-2" style="width: 50px;" alt="{{ loan.book.title }}">
+                <div>
+                  <strong>{{ loan.book.title }}</strong><br>
+                  <small class="text-muted">{{ loan.book.author }}</small>
+                </div>
+              </div>
+            </td>
+            <td>{{ loan.user.email }}</td>
+            <td>{{ loan.checkoutDate | date:'mediumDate' }}</td>
+            <td>
+              <span [ngClass]="{'text-danger': isOverdue(loan.dueDate) && !loan.returnDate}">
+                {{ loan.dueDate | date:'mediumDate' }}
+              </span>
+            </td>
+            <td>
+              @if (loan.returnDate) {
+                <span class="badge bg-success">Returned</span>
+                <br>
+                <small>{{ loan.returnDate | date:'mediumDate' }}</small>
+              } @else if (isOverdue(loan.dueDate)) {
+                <span class="badge bg-danger">Overdue</span>
+                <br>
+                <small>{{ getDaysOverdue(loan.dueDate) }} days</small>
+              } @else {
+                <span class="badge bg-warning">On Loan</span>
+                <br>
+                <small>{{ getDaysRemaining(loan.dueDate) }} days remaining</small>
+              }
+            </td>
+            <td>
+              @if (!loan.returnDate) {
+                <button class="btn btn-sm btn-primary"
+                        (click)="returnBook(loan.id)"
+                        [disabled]="processingReturnId === loan.id">
+                  @if (processingReturnId === loan.id) {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                  }
+                  Mark as Returned
+                </button>
+              } @else {
+                <span class="text-muted">Returned</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

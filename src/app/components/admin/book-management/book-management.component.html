@@ -1,0 +1,209 @@
+<h2>{{ isEditing ? 'Edit Book' : 'Add New Book' }}</h2>
+
+<!-- Book Form -->
+<div class="card mb-4">
+  <div class="card-body">
+    @if (formError) {
+      <div class="alert alert-danger">{{ formError }}</div>
+    }
+    @if (formSuccess) {
+      <div class="alert alert-success">{{ formSuccess }}</div>
+    }
+
+    <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="title" class="form-label">Title*</label>
+          <input type="text" class="form-control" id="title" formControlName="title"
+                 [ngClass]="{'is-invalid': bookForm.get('title')?.invalid && bookForm.get('title')?.touched}">
+          @if (bookForm.get('title')?.invalid && bookForm.get('title')?.touched) {
+            <div class="invalid-feedback">Title is required</div>
+          }
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="author" class="form-label">Author*</label>
+          <input type="text" class="form-control" id="author" formControlName="author"
+                 [ngClass]="{'is-invalid': bookForm.get('author')?.invalid && bookForm.get('author')?.touched}">
+          @if (bookForm.get('author')?.invalid && bookForm.get('author')?.touched) {
+            <div class="invalid-feedback">Author is required</div>
+          }
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" rows="3" formControlName="description"
+                  [ngClass]="{'is-invalid': bookForm.get('description')?.invalid && bookForm.get('description')?.touched}"></textarea>
+        @if (bookForm.get('description')?.invalid && bookForm.get('description')?.touched) {
+          <div class="invalid-feedback">Description cannot exceed 2000 characters</div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="coverImageUrl" class="form-label">Cover Image URL*</label>
+        <input type="url" class="form-control" id="coverImageUrl" formControlName="coverImageUrl"
+               [ngClass]="{'is-invalid': bookForm.get('coverImageUrl')?.invalid && bookForm.get('coverImageUrl')?.touched}">
+        @if (bookForm.get('coverImageUrl')?.invalid && bookForm.get('coverImageUrl')?.touched) {
+          <div class="invalid-feedback">Valid image URL is required</div>
+        }
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="publisher" class="form-label">Publisher*</label>
+          <input type="text" class="form-control" id="publisher" formControlName="publisher"
+                 [ngClass]="{'is-invalid': bookForm.get('publisher')?.invalid && bookForm.get('publisher')?.touched}">
+          @if (bookForm.get('publisher')?.invalid && bookForm.get('publisher')?.touched) {
+            <div class="invalid-feedback">Publisher is required</div>
+          }
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="publicationDate" class="form-label">Publication Date*</label>
+          <input type="date" class="form-control" id="publicationDate" formControlName="publicationDate"
+                 [ngClass]="{'is-invalid': bookForm.get('publicationDate')?.invalid && bookForm.get('publicationDate')?.touched}">
+          @if (bookForm.get('publicationDate')?.invalid && bookForm.get('publicationDate')?.touched) {
+            <div class="invalid-feedback">Publication date is required</div>
+          }
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="category" class="form-label">Category*</label>
+          <input type="text" class="form-control" id="category" formControlName="category"
+                 [ngClass]="{'is-invalid': bookForm.get('category')?.invalid && bookForm.get('category')?.touched}">
+          @if (bookForm.get('category')?.invalid && bookForm.get('category')?.touched) {
+            <div class="invalid-feedback">Category is required</div>
+          }
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="isbn" class="form-label">ISBN*</label>
+          <input type="text" class="form-control" id="isbn" formControlName="isbn"
+                 [ngClass]="{'is-invalid': bookForm.get('isbn')?.invalid && bookForm.get('isbn')?.touched}">
+          @if (bookForm.get('isbn')?.invalid && bookForm.get('isbn')?.touched) {
+            <div class="invalid-feedback">ISBN is required</div>
+          }
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="pageCount" class="form-label">Page Count*</label>
+          <input type="number" class="form-control" id="pageCount" formControlName="pageCount"
+                 [ngClass]="{'is-invalid': bookForm.get('pageCount')?.invalid && bookForm.get('pageCount')?.touched}">
+          @if (bookForm.get('pageCount')?.invalid && bookForm.get('pageCount')?.touched) {
+            <div class="invalid-feedback">Valid page count is required</div>
+          }
+        </div>
+      </div>
+
+      <div class="d-flex">
+        <button type="submit" class="btn btn-primary me-2" [disabled]="formSubmitting">
+          @if (formSubmitting) {
+            <span class="spinner-border spinner-border-sm me-1"></span>
+          }
+          {{ isEditing ? 'Update Book' : 'Add Book' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<h2>Manage Books</h2>
+
+<!-- Search -->
+<div class="row mb-3">
+  <div class="col-md-6">
+    <div class="input-group">
+      <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Search books...">
+      <button class="btn btn-primary" (click)="searchBooks()">
+        <i class="bi bi-search"></i> Search
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Books List -->
+@if (loading) {
+  <div class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+} @else if (error) {
+  <div class="alert alert-danger">
+    {{ error }}
+  </div>
+} @else if (books.length === 0) {
+  <div class="alert alert-info">
+    No books found.
+  </div>
+} @else {
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Cover</th>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (book of books; track book.id) {
+          <tr>
+            <td>
+              <img [src]="book.coverImageUrl" class="img-thumbnail" style="width: 50px;" alt="{{ book.title }}">
+            </td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.category }}</td>
+            <td>
+              <span class="badge" [ngClass]="book.isAvailable ? 'bg-success' : 'bg-danger'">
+                {{ book.isAvailable ? 'Available' : 'Checked Out' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-primary me-1" (click)="editBook(book)">
+                <i class="bi bi-pencil"></i> Edit
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="confirmDelete(book)">
+                <i class="bi bi-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (showDeleteConfirmation) {
+  <div class="modal fade show" style="display: block; background-color: rgba(0,0,0,0.5);" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Delete</h5>
+          <button type="button" class="btn-close" (click)="cancelDelete()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete the book "{{ bookToDelete?.title }}"?</p>
+          @if (bookToDelete && !bookToDelete.isAvailable) {
+            <div class="alert alert-warning">
+              This book is currently checked out. Deleting it will affect active loans.
+            </div>
+          }
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="deleteBook()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
