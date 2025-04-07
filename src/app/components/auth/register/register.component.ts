@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
@@ -23,10 +23,26 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService
   ) {}
 
+  private hasCapitalLetter(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!/[A-Z]/.test(value)) {
+      return { capitalLetter: true };
+    }
+    return null;
+  }
+
+  private hasSpecialCharacter(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+      return { specialCharacter: true };
+    }
+    return null;
+  }
+
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6), this.hasCapitalLetter, this.hasSpecialCharacter]],
       role: ['Customer', Validators.required]
     });
   }

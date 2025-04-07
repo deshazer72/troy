@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoanService } from '../../../services/loan.service';
-import { BookLoan } from '../../../models/book-loan.model';
+import { BookLoan, BookLoanDto } from '../../../models/book-loan.model';
 
 @Component({
   selector: 'app-loan-management',

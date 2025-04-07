@@ -32,7 +32,6 @@ export class ProfileComponent implements OnInit {
   }
 
   loadMyLoans(): void {
-    debugger;
     this.loading = true;
     this.error = null;
 

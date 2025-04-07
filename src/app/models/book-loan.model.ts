@@ -11,6 +11,8 @@ export interface BookLoan {
   dueDate: Date;
   returnDate?: string;
   isReturned: boolean;
+  userName: string;
+  userEmail: string;
 }
 
 export interface BookLoanDto {
@@ -19,4 +21,7 @@ export interface BookLoanDto {
   checkoutDate: string; // Use `string` for dates returned from the API
   dueDate: string;
   isReturned: boolean;
+  userName: string;
+  userEmail: string;
+  returnDate?: string; // Use `string` for dates returned from the API
 }

@@ -31,7 +31,8 @@
         }
 
         <!-- Checkout Button - Only available for logged-in customers and if book is available -->
-        @if (authService.isCustomer() && book.isAvailable) {
+        @if (book.isAvailable) {
+          <div>
           <button class="btn btn-primary mt-2"
                   (click)="checkoutBook()"
                   [disabled]="isCheckingOut">
@@ -40,6 +41,7 @@
             }
             Check Out
           </button>
+          </div>
         }
       </div>
     </div>

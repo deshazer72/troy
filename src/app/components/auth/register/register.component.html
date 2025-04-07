@@ -37,6 +37,12 @@
                 @if (f['password'].errors['minlength']) {
                   Password must be at least 6 characters
                 }
+                @if (f['password'].errors['capitalLetter']) {
+                  Password must contain at least one capital letter
+                }
+                @if (f['password'].errors['specialCharacter']) {
+                  Password must contain at least one special character
+                }
               </div>
             }
           </div>

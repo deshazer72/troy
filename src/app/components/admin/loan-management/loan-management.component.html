@@ -39,6 +39,7 @@
       </thead>
       <tbody>
         @for (loan of loans; track loan.id) {
+          @if (!loan.isReturned) {
           <tr>
             <td>
               <div class="d-flex align-items-center">
@@ -49,7 +50,7 @@
                 </div>
               </div>
             </td>
-            <td>{{ loan.user?.email }}</td>
+            <td>{{ loan.userEmail }}</td>
             <td>{{ loan.checkoutDate | date:'mediumDate' }}</td>
             <td>
               <span [ngClass]="{'text-danger': isOverdue(loan.dueDate) && !loan.returnDate}">
@@ -86,6 +87,7 @@
               }
             </td>
           </tr>
+        }
         }
       </tbody>
     </table>
